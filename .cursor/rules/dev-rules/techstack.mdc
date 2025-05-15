@@ -14,11 +14,56 @@ alwaysApply: true
 
 ## コアテクノロジー
 
-- **Astro** (v4.x) - モダンな静的サイトジェネレーター
+- **Astro** (v5.x) - モダンな静的サイトジェネレーター
 - **TypeScript** (v5.x) - 型付き JavaScript
-- **Tailwind CSS** (v3.x) - ユーティリティファースト CSS フレームワーク
+- **Tailwind CSS** (v3.4.x) - ユーティリティファースト CSS フレームワーク
   - tailwind-merge - クラス名の最適化
   - tailwindcss-animate - アニメーション機能
+- **@astrojs/tailwind** (v6.x) - Astro用Tailwind統合
+- **PostCSS** (v8.4.x) - CSSトランスフォーメーション
+- **Autoprefixer** (v10.4.x) - CSSベンダープレフィックス自動付与
+- **React** (v18.x) - インタラクティブな要素が必要な場合のみ使用
+  - **@astrojs/react** (v4.x) - AstroでReactコンポーネントを使用するための統合
+- **Framer Motion** (v12.x) - アニメーションライブラリ
+- **Lucide Icons** - アイコンライブラリ
+
+## 依存関係セットアップ例
+
+```json
+// package.json の devDependencies 推奨例
+{
+  "devDependencies": {
+    "@astrojs/react": "^4.2.7",
+    "@astrojs/tailwind": "^6.0.2",
+    "autoprefixer": "^10.4.21",
+    "framer-motion": "^12.11.3",
+    "postcss": "^8.4.35",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tailwindcss": "^3.4.1"
+  }
+}
+```
+
+## セットアップ時の注意
+
+- **必ず上記バージョン範囲でインストールすること**
+- 依存関係の競合やエラーが出た場合は、
+  1. `node_modules` と `package-lock.json` を削除
+  2. `npm install` でクリーンインストール
+- それでも解決しない場合は、
+  - `npm install --legacy-peer-deps` を試す
+  - 依存パッケージのバージョンを明示的に指定し直す
+- `react`/`react-dom`/`postcss` などは**存在する安定バージョンのみ指定すること**（例: 18.x, 8.4.x）
+- 公式スターターやテンプレートを活用するとバージョン競合のリスクを減らせる
+
+## トラブルシューティング
+
+- **Tailwind CSSのPostCSSプラグインエラー**
+  - Tailwind CSS v4.x系はAstro公式の@astrojs/tailwind v6.xと互換性がありません。必ずTailwind CSS v3.4.xを使用してください。
+- **依存関係の競合でnpm installが失敗する場合**
+  - `npm install --legacy-peer-deps` を使う
+  - それでも解決しない場合は、バージョンを見直し、再度クリーンインストール
 
 ## UI コンポーネント
 

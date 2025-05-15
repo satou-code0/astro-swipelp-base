@@ -6,9 +6,9 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout title="スワイプ型ランディングページ">
-	<main class="h-screen overflow-hidden">
+	<main class="h-screen overflow-y-scroll snap-y snap-mandatory">
 		<!-- ヒーローセクション -->
-		<section class="h-screen w-full flex items-center justify-center bg-blue-500">
+		<section class="h-screen w-full flex items-center justify-center bg-blue-500 snap-start">
 			<div class="text-center text-white">
 				<h1 class="text-4xl font-bold mb-4">ヒーローセクション</h1>
 				<p class="text-xl">スワイプして次のセクションへ</p>
@@ -16,7 +16,7 @@ import Layout from '../layouts/Layout.astro';
 		</section>
 
 		<!-- サービス紹介セクション -->
-		<section class="h-screen w-full flex items-center justify-center bg-green-500">
+		<section class="h-screen w-full flex items-center justify-center bg-green-500 snap-start">
 			<div class="text-center text-white">
 				<h2 class="text-4xl font-bold mb-4">サービス紹介</h2>
 				<p class="text-xl">私たちのサービスについて</p>
@@ -24,7 +24,7 @@ import Layout from '../layouts/Layout.astro';
 		</section>
 
 		<!-- お問い合わせセクション -->
-		<section class="h-screen w-full flex items-center justify-center bg-purple-500">
+		<section class="h-screen w-full flex items-center justify-center bg-purple-500 snap-start">
 			<div class="text-center text-white">
 				<h2 class="text-4xl font-bold mb-4">お問い合わせ</h2>
 				<p class="text-xl">お気軽にお問い合わせください</p>
@@ -33,15 +33,52 @@ import Layout from '../layouts/Layout.astro';
 	</main>
 </Layout>
 
+<style>
+	/* スナップスクロールの動作をスムーズにする */
+	main {
+		scroll-behavior: smooth;
+	}
+
+	/* スクロールバーのカスタマイズ */
+	main::-webkit-scrollbar {
+		width: 8px;
+	}
+
+	main::-webkit-scrollbar-track {
+		background: #f1f1f1;
+	}
+
+	main::-webkit-scrollbar-thumb {
+		background: #888;
+		border-radius: 4px;
+	}
+
+	main::-webkit-scrollbar-thumb:hover {
+		background: #555;
+	}
+</style>
+
 <script>
-	// スワイプ操作の実装
+	// キーボード操作のサポート
+	document.addEventListener('keydown', (e) => {
+		const sections = document.querySelectorAll('section');
+		const currentSection = Array.from(sections).findIndex(section => {
+			const rect = section.getBoundingClientRect();
+			return rect.top >= 0 && rect.top <= window.innerHeight / 2;
+		});
+
+		if (e.key === 'ArrowDown' && currentSection < sections.length - 1) {
+			sections[currentSection + 1].scrollIntoView({ behavior: 'smooth' });
+		} else if (e.key === 'ArrowUp' && currentSection > 0) {
+			sections[currentSection - 1].scrollIntoView({ behavior: 'smooth' });
+		}
+	});
+
+	// タッチスワイプのサポート
 	let touchStartY = 0;
 	let touchEndY = 0;
 	const main = document.querySelector('main');
-	let currentSection = 0;
-	const sections = document.querySelectorAll('section');
 
-	// タッチイベントの設定
 	main?.addEventListener('touchstart', (e) => {
 		touchStartY = e.touches[0].clientY;
 	});
@@ -51,33 +88,24 @@ import Layout from '../layouts/Layout.astro';
 		handleSwipe();
 	});
 
-	// スワイプ処理
 	function handleSwipe() {
 		const swipeDistance = touchEndY - touchStartY;
 		const threshold = 50; // スワイプ判定の閾値
 
 		if (Math.abs(swipeDistance) < threshold) return;
 
-		if (swipeDistance > 0 && currentSection > 0) {
-			// 下スワイプ
-			currentSection--;
-		} else if (swipeDistance < 0 && currentSection < sections.length - 1) {
-			// 上スワイプ
-			currentSection++;
-		}
-
-		// セクションの切り替え
-		sections.forEach((section, index) => {
-			section.style.transform = `translateY(${(index - currentSection) * 100}%)`;
+		const sections = document.querySelectorAll('section');
+		const currentSection = Array.from(sections).findIndex(section => {
+			const rect = section.getBoundingClientRect();
+			return rect.top >= 0 && rect.top <= window.innerHeight / 2;
 		});
-	}
 
-	// 初期位置の設定
-	sections.forEach((section, index) => {
-		section.style.position = 'absolute';
-		section.style.top = '0';
-		section.style.left = '0';
-		section.style.transition = 'transform 0.5s ease-in-out';
-		section.style.transform = `translateY(${index * 100}%)`;
-	});
+		if (swipeDistance > 0 && currentSection < sections.length - 1) {
+			// 下スワイプ
+			sections[currentSection + 1].scrollIntoView({ behavior: 'smooth' });
+		} else if (swipeDistance < 0 && currentSection > 0) {
+			// 上スワイプ
+			sections[currentSection - 1].scrollIntoView({ behavior: 'smooth' });
+		}
+	}
 </script>
