@@ -1,5 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { HeroSection } from '../components/HeroSection';
+import { ServiceSection } from '../components/ServiceSection';
+import { ContactSection } from '../components/ContactSection';
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
@@ -7,29 +10,9 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout title="スワイプ型ランディングページ">
 	<main class="h-screen overflow-y-scroll snap-y snap-mandatory">
-		<!-- ヒーローセクション -->
-		<section class="h-screen w-full flex items-center justify-center bg-blue-500 snap-start">
-			<div class="text-center text-white">
-				<h1 class="text-4xl font-bold mb-4">ヒーローセクション</h1>
-				<p class="text-xl">スワイプして次のセクションへ</p>
-			</div>
-		</section>
-
-		<!-- サービス紹介セクション -->
-		<section class="h-screen w-full flex items-center justify-center bg-green-500 snap-start">
-			<div class="text-center text-white">
-				<h2 class="text-4xl font-bold mb-4">サービス紹介</h2>
-				<p class="text-xl">私たちのサービスについて</p>
-			</div>
-		</section>
-
-		<!-- お問い合わせセクション -->
-		<section class="h-screen w-full flex items-center justify-center bg-purple-500 snap-start">
-			<div class="text-center text-white">
-				<h2 class="text-4xl font-bold mb-4">お問い合わせ</h2>
-				<p class="text-xl">お気軽にお問い合わせください</p>
-			</div>
-		</section>
+		<HeroSection client:load />
+		<ServiceSection client:load />
+		<ContactSection client:load />
 	</main>
 </Layout>
 
