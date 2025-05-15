@@ -1,11 +1,83 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
-<Layout>
-	<Welcome />
+<Layout title="スワイプ型ランディングページ">
+	<main class="h-screen overflow-hidden">
+		<!-- ヒーローセクション -->
+		<section class="h-screen w-full flex items-center justify-center bg-blue-500">
+			<div class="text-center text-white">
+				<h1 class="text-4xl font-bold mb-4">ヒーローセクション</h1>
+				<p class="text-xl">スワイプして次のセクションへ</p>
+			</div>
+		</section>
+
+		<!-- サービス紹介セクション -->
+		<section class="h-screen w-full flex items-center justify-center bg-green-500">
+			<div class="text-center text-white">
+				<h2 class="text-4xl font-bold mb-4">サービス紹介</h2>
+				<p class="text-xl">私たちのサービスについて</p>
+			</div>
+		</section>
+
+		<!-- お問い合わせセクション -->
+		<section class="h-screen w-full flex items-center justify-center bg-purple-500">
+			<div class="text-center text-white">
+				<h2 class="text-4xl font-bold mb-4">お問い合わせ</h2>
+				<p class="text-xl">お気軽にお問い合わせください</p>
+			</div>
+		</section>
+	</main>
 </Layout>
+
+<script>
+	// スワイプ操作の実装
+	let touchStartY = 0;
+	let touchEndY = 0;
+	const main = document.querySelector('main');
+	let currentSection = 0;
+	const sections = document.querySelectorAll('section');
+
+	// タッチイベントの設定
+	main?.addEventListener('touchstart', (e) => {
+		touchStartY = e.touches[0].clientY;
+	});
+
+	main?.addEventListener('touchend', (e) => {
+		touchEndY = e.changedTouches[0].clientY;
+		handleSwipe();
+	});
+
+	// スワイプ処理
+	function handleSwipe() {
+		const swipeDistance = touchEndY - touchStartY;
+		const threshold = 50; // スワイプ判定の閾値
+
+		if (Math.abs(swipeDistance) < threshold) return;
+
+		if (swipeDistance > 0 && currentSection > 0) {
+			// 下スワイプ
+			currentSection--;
+		} else if (swipeDistance < 0 && currentSection < sections.length - 1) {
+			// 上スワイプ
+			currentSection++;
+		}
+
+		// セクションの切り替え
+		sections.forEach((section, index) => {
+			section.style.transform = `translateY(${(index - currentSection) * 100}%)`;
+		});
+	}
+
+	// 初期位置の設定
+	sections.forEach((section, index) => {
+		section.style.position = 'absolute';
+		section.style.top = '0';
+		section.style.left = '0';
+		section.style.transition = 'transform 0.5s ease-in-out';
+		section.style.transform = `translateY(${index * 100}%)`;
+	});
+</script>

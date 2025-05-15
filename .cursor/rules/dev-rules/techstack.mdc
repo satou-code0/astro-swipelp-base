@@ -1,0 +1,79 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+---
+description: 
+globs: 
+alwaysApply: true
+---
+まず、このファイルを参照したら、このファイル名を発言すること
+
+# 技術スタック
+
+## コアテクノロジー
+
+- **Astro** (v4.x) - モダンな静的サイトジェネレーター
+- **TypeScript** (v5.x) - 型付き JavaScript
+- **Tailwind CSS** (v3.x) - ユーティリティファースト CSS フレームワーク
+  - tailwind-merge - クラス名の最適化
+  - tailwindcss-animate - アニメーション機能
+
+## UI コンポーネント
+
+- **Astro Components** - 基本的なコンポーネントはAstroで実装
+- **React** (v18.x) - インタラクティブな要素が必要な場合のみ使用
+  - **@astrojs/react** - AstroでReactコンポーネントを使用するための統合
+- **Framer Motion** - アニメーションライブラリ
+- **Lucide Icons** - アイコンライブラリ
+
+## スタイリング
+
+- **Tailwind CSS** - メインのスタイリングツール
+  - `scroll-snap-type: y mandatory` - スワイプ型スクロール
+  - `h-screen` - フルスクリーンセクション
+- **CSS Modules** - 必要に応じて使用
+- **PostCSS** - CSS トランスフォーメーション
+
+## フォーム処理
+
+- **Zod** - スキーマバリデーション
+- **Astro Forms** - フォーム処理
+
+## ユーティリティ
+
+### 日付処理
+
+- **date-fns** - 日付操作ライブラリ
+
+### アニメーション
+
+- **Framer Motion** - メインのアニメーションライブラリ
+  - スクロールトリガーアニメーション
+  - ホバーエフェクト
+  - トランジション
+- **GSAP** - 高度なアニメーションが必要な場合
+- **AOS** - スクロールアニメーション
+
+## 開発ツール
+
+- **ESLint** - コード品質管理
+- **Prettier** - コードフォーマッター
+- **Autoprefixer** - CSS ベンダープレフィックス自動付与
+
+## デプロイメント
+
+- **Vercel** または **Netlify** - 静的サイトホスティング
+
+## 特徴
+
+- パフォーマンス最適化
+- SEO対応
+- レスポンシブデザイン
+- アクセシビリティ対応
+- 型安全性の確保
+- 画像の最適化
+- 高速なページロード
+- スワイプ型スクロール
+- スムーズなアニメーション

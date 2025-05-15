@@ -1,0 +1,222 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+---
+description: 
+globs: *.tsx
+alwaysApply: false
+---
+まず、このファイルを参照したら、このファイル名を発言すること
+
+# UI/UX 設計・実装ルール
+
+## 1. コンポーネント設計
+
+### 重要度: 最高
+
+- Astroコンポーネントを基本として使用
+- インタラクティブな要素が必要な場合のみReactコンポーネントを使用
+- **既存の UI は承認なしでの変更を禁止**
+
+```astro
+// ✅ 良い例：Astroコンポーネント
+---
+const { title } = Astro.props;
+---
+<div class="card">
+  <h2>{title}</h2>
+  <slot />
+</div>
+
+// ✅ 良い例：インタラクティブ要素が必要な場合のReactコンポーネント
+---
+import InteractiveComponent from '../components/InteractiveComponent';
+---
+<InteractiveComponent client:load />
+```
+
+## 2. スタイリング規約
+
+### 重要度: 高
+
+### Tailwind CSS の使用
+
+- ユーティリティクラスを優先的に使用
+- カスタムクラスは`@layer`で定義
+- 命名規則は`kebab-case`を使用
+
+```astro
+// ✅ 良い例
+<div class="flex items-center justify-between p-4">
+
+// ❌ 悪い例
+<div style="display: flex; align-items: center;">
+```
+
+### スワイプ型スクロール
+
+- メインコンテナに`scroll-snap-type: y mandatory`を適用
+- 各セクションに`h-screen`と`scroll-snap-align: start`を適用
+- スクロールスナップの動作を確認
+
+```astro
+// ✅ 良い例
+<main class="h-screen overflow-y-scroll snap-y snap-mandatory">
+  <section class="h-screen snap-start">
+    <!-- セクションの内容 -->
+  </section>
+</main>
+```
+
+## 3. レスポンシブデザイン
+
+### 重要度: 高
+
+- モバイルファーストアプローチ
+- Tailwind のブレークポイントを使用
+  - sm: 640px
+  - md: 768px
+  - lg: 1024px
+  - xl: 1280px
+  - 2xl: 1536px
+
+## 4. アクセシビリティ
+
+### 重要度: 高
+
+- WAI-ARIA ガイドラインの遵守
+- キーボード操作のサポート
+- 適切なコントラスト比の確保
+- スクリーンリーダー対応
+
+## 5. アニメーションとトランジション
+
+### 重要度: 高
+
+- Framer Motionを使用したアニメーション
+  - スクロールトリガーアニメーション
+  - ホバーエフェクト
+  - トランジション
+- 過度なアニメーションを避ける
+- パフォーマンスを考慮した実装
+
+```tsx
+// ✅ 良い例：Framer Motionアニメーション
+import { motion } from 'framer-motion';
+
+const AnimatedTitle = () => (
+  <motion.h1
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.5 }}
+  >
+    Title
+  </motion.h1>
+);
+```
+
+## 6. フォーム設計
+
+### 重要度: 高
+
+- Astro Formsを使用
+- バリデーションメッセージは明確に表示
+- 入力補助の実装（オートコンプリートなど）
+
+## 7. 重要な制約事項
+
+### 重要度: 最高
+
+1. UI 変更の制限
+
+- **既存の UI コンポーネントやレイアウトの変更は禁止**
+- **変更が必要な場合は必ず事前承認を得ること**
+- レイアウト、色、フォント、間隔などの変更は特に注意
+
+2. コンポーネントの追加
+
+- 新規コンポーネントはAstroの設計原則に従う
+- 既存のコンポーネントの再利用を優先
+
+## 8. エラー表示とフィードバック
+
+### 重要度: 高
+
+- トースト通知は必要に応じて実装
+- エラーメッセージは具体的で分かりやすく
+- ローディング状態の適切な表示
+
+## 9. アイコンとイメージ
+
+### 重要度: 中
+
+- Lucide Icons を標準として使用
+- SVG アイコンの最適化
+- 画像は`astro:assets`で最適化
+
+## 10. ダークモード対応
+
+### 重要度: 高
+
+- `dark:`プレフィックスでスタイリング
+- システム設定との連動
+- コントラスト比の維持
+
+## 11. コンポーネント設計原則
+
+### 重要度: 高
+
+- 単一責任の原則
+- Props 経由での柔軟なカスタマイズ
+- 適切なコンポーネント分割
+
+```astro
+// ✅ 良い例
+---
+interface Props {
+  title: string;
+  className?: string;
+}
+const { title, className } = Astro.props;
+---
+
+// ❌ 悪い例
+---
+interface Props {
+  title: string;
+  titleColor: string; // 不要なカスタマイズ
+  customPadding: string; // 避けるべき
+}
+---
+```
+
+## 注意事項
+
+1. デザインの一貫性
+
+- コンポーネントの一貫した使用
+- カスタムスタイルの最小化
+- デザイントークンの遵守
+
+2. パフォーマンス
+
+- 不要なアニメーションの削除
+- 画像の最適化
+- バンドルサイズの監視
+
+3. 品質管理
+
+- コンポーネントのドキュメント作成
+- ビジュアルリグレッションテスト
+- クロスブラウザテスト
+
+4. ドキュメント
+
+- コンポーネントの使用例
+- Props の型定義
+- デザインシステムのガイドライン
+
+これらのルールは、プロジェクトの一貫性と保守性を確保するために重要です。
+変更が必要な場合は、必ずチームでの承認プロセスを経てください。
